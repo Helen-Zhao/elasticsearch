@@ -878,6 +878,7 @@ public class QueryStringQueryBuilderTests extends AbstractQueryTestCase<QueryStr
                 "    \"fuzziness\" : \"AUTO\",\n" +
                 "    \"fuzzy_prefix_length\" : 0,\n" +
                 "    \"fuzzy_max_expansions\" : 50,\n" +
+                "    \"fuzzy_transpositions\" : true,\n" +
                 "    \"phrase_slop\" : 0,\n" +
                 "    \"escape\" : false,\n" +
                 "    \"split_on_whitespace\" : true,\n" +

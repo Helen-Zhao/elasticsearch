@@ -111,6 +111,9 @@ public class MultiMatchQueryBuilderTests extends AbstractQueryTestCase<MultiMatc
         if (randomBoolean()) {
             query.fuzzyRewrite(getRandomRewriteMethod());
         }
+        if(randomBoolean()) {
+            query.fuzzyTranspositions(randomBoolean());
+        }
         if (randomBoolean()) {
             query.useDisMax(randomBoolean());
         }
@@ -239,6 +242,7 @@ public class MultiMatchQueryBuilderTests extends AbstractQueryTestCase<MultiMatc
                 "    \"slop\" : 0,\n" +
                 "    \"prefix_length\" : 0,\n" +
                 "    \"max_expansions\" : 50,\n" +
+                "    \"fuzzy_transpositions\" : true,\n" +
                 "    \"lenient\" : false,\n" +
                 "    \"zero_terms_query\" : \"NONE\",\n" +
                 "    \"boost\" : 1.0\n" +
