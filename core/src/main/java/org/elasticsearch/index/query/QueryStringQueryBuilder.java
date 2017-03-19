@@ -509,7 +509,6 @@ public class QueryStringQueryBuilder extends AbstractQueryBuilder<QueryStringQue
         return this;
     }
 
-    /** Gets the fuzzy query transposition setting. */
     public boolean fuzzyTranspositions() {
         return this.fuzzyTranspositions;
     }
