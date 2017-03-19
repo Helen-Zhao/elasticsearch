@@ -226,7 +226,9 @@ public class QueryStringQueryBuilder extends AbstractQueryBuilder<QueryStringQue
         fuzziness = new Fuzziness(in);
         fuzzyPrefixLength = in.readVInt();
         fuzzyMaxExpansions = in.readVInt();
-        fuzzyTranspositions = in.readBoolean();
+        if (in.getVersion().onOrAfter(Version.V_5_1_1_UNRELEASED)) {
+            fuzzyTranspositions = in.readBoolean();
+        }
         fuzzyRewrite = in.readOptionalString();
         phraseSlop = in.readVInt();
         useDisMax = in.readBoolean();
@@ -271,7 +273,9 @@ public class QueryStringQueryBuilder extends AbstractQueryBuilder<QueryStringQue
         this.fuzziness.writeTo(out);
         out.writeVInt(this.fuzzyPrefixLength);
         out.writeVInt(this.fuzzyMaxExpansions);
-        out.writeBoolean(this.fuzzyTranspositions);
+        if (out.getVersion().onOrAfter(Version.V_5_1_1_UNRELEASED)) {
+            out.writeBoolean(this.fuzzyTranspositions);
+        }
         out.writeOptionalString(this.fuzzyRewrite);
         out.writeVInt(this.phraseSlop);
         out.writeBoolean(this.useDisMax);

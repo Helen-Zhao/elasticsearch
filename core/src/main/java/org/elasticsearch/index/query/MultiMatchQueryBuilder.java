@@ -22,6 +22,7 @@ package org.elasticsearch.index.query;
 import org.apache.lucene.search.FuzzyQuery;
 import org.apache.lucene.search.Query;
 import org.elasticsearch.ElasticsearchParseException;
+import org.elasticsearch.Version;
 import org.elasticsearch.common.ParseField;
 import org.elasticsearch.common.ParsingException;
 import org.elasticsearch.common.Strings;
@@ -55,6 +56,7 @@ public class MultiMatchQueryBuilder extends AbstractQueryBuilder<MultiMatchQuery
     public static final int DEFAULT_PHRASE_SLOP = MatchQuery.DEFAULT_PHRASE_SLOP;
     public static final int DEFAULT_PREFIX_LENGTH = FuzzyQuery.defaultPrefixLength;
     public static final int DEFAULT_MAX_EXPANSIONS = FuzzyQuery.defaultMaxExpansions;
+    public static final boolean DEFAULT_FUZZY_TRANSPOSITIONS = FuzzyQuery.defaultTranspositions;
     public static final boolean DEFAULT_LENIENCY = MatchQuery.DEFAULT_LENIENCY;
     public static final MatchQuery.ZeroTermsQuery DEFAULT_ZERO_TERMS_QUERY = MatchQuery.DEFAULT_ZERO_TERMS_QUERY;
 
@@ -84,7 +86,7 @@ public class MultiMatchQueryBuilder extends AbstractQueryBuilder<MultiMatchQuery
     private Fuzziness fuzziness;
     private int prefixLength = DEFAULT_PREFIX_LENGTH;
     private int maxExpansions = DEFAULT_MAX_EXPANSIONS;
-    private boolean fuzzyTranspositions = FuzzyQuery.defaultTranspositions;
+    private boolean fuzzyTranspositions = DEFAULT_FUZZY_TRANSPOSITIONS;
     private String minimumShouldMatch;
     private String fuzzyRewrite = null;
     private Boolean useDisMax;
@@ -215,7 +217,9 @@ public class MultiMatchQueryBuilder extends AbstractQueryBuilder<MultiMatchQuery
         fuzziness = in.readOptionalWriteable(Fuzziness::new);
         prefixLength = in.readVInt();
         maxExpansions = in.readVInt();
-        fuzzyTranspositions = in.readBoolean();
+        if (in.getVersion().onOrAfter(Version.V_5_1_1_UNRELEASED)) {
+            fuzzyTranspositions = in.readBoolean();
+        }
         minimumShouldMatch = in.readOptionalString();
         fuzzyRewrite = in.readOptionalString();
         useDisMax = in.readOptionalBoolean();
@@ -240,7 +244,9 @@ public class MultiMatchQueryBuilder extends AbstractQueryBuilder<MultiMatchQuery
         out.writeOptionalWriteable(fuzziness);
         out.writeVInt(prefixLength);
         out.writeVInt(maxExpansions);
-        out.writeBoolean(fuzzyTranspositions);
+        if (out.getVersion().onOrAfter(Version.V_5_1_1_UNRELEASED)) {
+            out.writeBoolean(fuzzyTranspositions);
+        }
         out.writeOptionalString(minimumShouldMatch);
         out.writeOptionalString(fuzzyRewrite);
         out.writeOptionalBoolean(useDisMax);
